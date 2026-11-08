@@ -531,11 +531,6 @@ body.dark .cursor-glow {
 html, body {
   overflow-x: hidden;
 }
-.map-box {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
 .tables {
   margin-top: 10px;
 }
@@ -558,11 +553,40 @@ p, ul {
   max-height: 650px;
 }
 .map-box {
-  margin-top: -20px;
-  margin-bottom: -40px;
+   width: calc(100% - 300px);
+   margin-top: 0;
+   margin-bottom: 0;
+   float: left;
 }
+
 .map-box svg {
-  transform: translateY(-20px);
+   display: block;
+   width: 100%;
+   height: auto;
+   max-height: 650px;
+   transform: none;
+}
+#searchInfo:empty {
+    display: none;
+}
+
+.map-box {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.map-box svg {
+    display: block;
+    margin-top: 0;
+}
+.tables {
+    clear: both;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
 }
 </style>
 </head>
@@ -637,8 +661,8 @@ odnośniki do najbardziej zaufanych stron wszystkich stolic europejskich,</li>
 
   <input type="text" id="countrySearch" placeholder="Wpisz nazwę kraju lub stolicy">
 </div>
-<div id="searchInfo" style="margin-top:10px; font-weight:bold;"></div>
-<label style="display:block; margin-top:8px;">
+<div id="searchInfo" style="font-weight:bold;"></div>
+<label style="display:block; margin-top:0;">
   <input type="checkbox" id="onlyResults">
   Pokaż tylko wyniki
 </label>
