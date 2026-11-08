@@ -54,7 +54,8 @@ h1 {
 }
 .photo-main,
 .photo-small {
-  width: 260px;
+  width: 100%;
+  max-width: 260px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
@@ -420,7 +421,15 @@ body.dark .cursor-glow {
  cursor: pointer; 
  transition: 0.2s; 
  } 
- 
+ .map-box {
+  width: 100%;
+}
+
+.map-box svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
  .map-box svg path:hover { 
  fill: gold; 
  transform: scale(1.01); 
@@ -437,7 +446,124 @@ body.dark .cursor-glow {
   z-index: 99999;
   pointer-events: none;
 }
+@media (max-width: 768px) {
 
+  body {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  p, ul {
+    font-size: 15px;
+  }
+
+  .theme-toggle {
+    position: static;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .photo-main,
+  .photo-small {
+    width: 100%;
+    max-width: 100%;
+    float: none;
+    margin: 0 auto 12px auto;
+    display: block;
+  }
+
+  .extra-photos {
+    float: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+  }
+
+  #countrySearch {
+    width: 90%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .tables {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .table-box {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table {
+    font-size: 13px;
+    min-width: 320px;
+  }
+
+  table td,
+  table th {
+    padding: 6px;
+  }
+
+  .map-box svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .contact-box a {
+    font-size: 16px;
+    padding: 16px;
+  }
+
+  #toTop {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+}
+html, body {
+  overflow-x: hidden;
+}
+.map-box {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.tables {
+  margin-top: 10px;
+}
+
+.search-label {
+  margin-bottom: 6px;
+}
+
+#countrySearch {
+  margin-top: 6px;
+}
+
+p, ul {
+  margin-bottom: 10px;
+}
+.map-box svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 650px;
+}
+.map-box {
+  margin-top: -20px;
+  margin-bottom: -40px;
+}
+.map-box svg {
+  transform: translateY(-20px);
+}
 </style>
 </head>
 <body>
@@ -517,13 +643,11 @@ odnośniki do najbardziej zaufanych stron wszystkich stolic europejskich,</li>
   Pokaż tylko wyniki
 </label>
 <div class="map-box"> 
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    width="680"
    height="520"
    version="1.1"
    id="svg1"
-   sodipodi:docname="Blank_map_of_Europe_(with_disputed_regions).svg"
    inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
