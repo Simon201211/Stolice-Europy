@@ -587,6 +587,107 @@ p, ul {
     justify-content: center;
     flex-wrap: wrap;
     gap: 30px;
+}.game-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 25px 0;
+}
+
+.game-link {
+    display: inline-block;
+    padding: 14px 25px;
+    border-radius: 12px;
+    background: #2878c8;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.game-link:hover {
+    background: #185b9c;
+    transform: translateY(-3px);
+}
+.game-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 25px 0;
+}
+
+.game-link {
+    display: inline-block;
+    padding: 14px 25px;
+    border-radius: 12px;
+    background: #2878c8;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.game-link:hover {
+    background: #185b9c;
+    transform: translateY(-3px);
+}
+.only-results-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0 18px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.only-results-label:hover {
+    background: transparent;
+    border: none;
+}
+
+.only-results-label input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+.game-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 20px auto 25px;
+}
+
+.game-link {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.25s;
+}
+
+.game-link:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 </style>
 </head>
@@ -662,10 +763,37 @@ odnośniki do najbardziej zaufanych stron wszystkich stolic europejskich,</li>
   <input type="text" id="countrySearch" placeholder="Wpisz nazwę kraju lub stolicy">
 </div>
 <div id="searchInfo" style="font-weight:bold;"></div>
-<label style="display:block; margin-top:0;">
+<label class="only-results-label">
   <input type="checkbox" id="onlyResults">
-  Pokaż tylko wyniki
+  <span
+    data-pl="Pokaż tylko wyniki"
+    data-en="Show results only"
+    data-ua="Показати лише результати">
+    Pokaż tylko wyniki
+  </span>
 </label>
+<div class="game-links">
+    <a href="odkrywca.html" class="game-link"
+       data-pl="🌍 Tryb odkrywcy"
+       data-en="🌍 Explorer mode"
+       data-ua="🌍 Режим дослідника">
+       🌍 Tryb odkrywcy
+    </a>
+
+    <a href="quiz.html" class="game-link"
+       data-pl="🧠 Quiz stolic"
+       data-en="🧠 Capitals quiz"
+       data-ua="🧠 Вікторина столиць">
+       🧠 Quiz stolic
+    </a>
+
+    <a href="mapa.html" class="game-link"
+       data-pl="🗺️ Mapa odwiedzonych stolic"
+       data-en="🗺️ Map of visited capitals"
+       data-ua="🗺️ Карта відвіданих столиць">
+       🗺️ Mapa odwiedzonych stolic
+    </a>
+</div>
 <div class="map-box"> 
 <svg
    width="680"
@@ -1080,8 +1208,8 @@ odnośniki do najbardziej zaufanych stron wszystkich stolic europejskich,</li>
 
 <tr><td data-pl="Albania" data-en="Albania" data-ua="Албанія">Albania</td>
 <td><a href="https://www.tirana.al" target="_blank" data-pl="Tirana" data-en="Tirana" data-ua="Тирана">Tirana</a></td></tr>
-<tr><td data-pl="Andora" data-en="Andorra" data-ua="Андорра">Andora</td>
-<td><a href="https://visitandorra.com" target="_blank" data-pl="Andora" data-en="Andorra la Vella" data-ua="Андорра-ла-Велья">Andora</a></td></tr>
+<tr><td data-pl="Andora" data-en="Andorra" data-ua="Андорра">Andorra la Vella</td>
+<td><a href="https://visitandorra.com" target="_blank" data-pl="Andorra la Vella" data-en="Andorra la Vella" data-ua="Андорра-ла-Велья">Andora</a></td></tr>
 <tr><td data-pl="Austria" data-en="Austria" data-ua="Австрія">Austria</td>
 <td><a href="https://www.wien.info" target="_blank" data-pl="Wiedeń" data-en="Vienna" data-ua="Відень">Wiedeń</a></td></tr>
 <tr><td data-pl="Białoruś" data-en="Belarus" data-ua="Білорусь">Białoruś</td>
@@ -1199,35 +1327,61 @@ odnośniki do najbardziej zaufanych stron wszystkich stolic europejskich,</li>
 
 
 
+
 <script>
-function setLang(lang){
-    document.querySelectorAll('[data-'+lang+']').forEach(el=>{
-        el.innerHTML = el.getAttribute('data-'+lang);
+
+let currentLang = localStorage.getItem('lang') || 'pl';
+
+const languageIndex = {
+    pl: 0,
+    en: 1,
+    ua: 2
+};
+
+function setLang(lang) {
+    if (!languageIndex.hasOwnProperty(lang)) return;
+
+    currentLang = lang;
+
+    document.documentElement.lang = lang;
+
+    document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+        el.innerHTML = el.getAttribute('data-' + lang);
     });
 
     const title = document.querySelector('title');
-    if(title && title.getAttribute('data-'+lang)){
-        title.textContent = title.getAttribute('data-'+lang);
+
+    if (title && title.getAttribute('data-' + lang)) {
+        title.textContent = title.getAttribute('data-' + lang);
     }
 
     localStorage.setItem('lang', lang);
 
-    document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
-    document.querySelector(`.flag[onclick="setLang('${lang}')"]`).classList.add('active');
-	
-const input = document.getElementById('countrySearch');
+    document.querySelectorAll('.flag').forEach(flag => {
+        flag.classList.remove('active');
 
-if (lang === 'pl') input.placeholder = 'Wpisz nazwę kraju lub stolicy';
-if (lang === 'en') input.placeholder = 'Enter country or capital name';
-if (lang === 'ua') input.placeholder = 'Введіть назву країни або столиці';
+        if (flag.getAttribute('onclick') === `setLang('${lang}')`) {
+            flag.classList.add('active');
+        }
+    });
+
+    const input = document.getElementById('countrySearch');
+
+    if (input) {
+        const placeholders = {
+            pl: 'Wpisz nazwę kraju lub stolicy',
+            en: 'Enter country or capital name',
+            ua: 'Введіть назву країни або столиці'
+        };
+
+        input.placeholder = placeholders[lang];
+    }
+
+    document.dispatchEvent(
+        new CustomEvent('languageChanged', { detail: lang })
+    );
 }
-document.addEventListener('DOMContentLoaded', () => {
 
-    const lang = localStorage.getItem('lang')
-      || ({ en:'en', ua:'ua', pl:'pl' }[navigator.language.slice(0,2)] || 'en');
-
-    setLang(lang);
-});
 document.addEventListener('DOMContentLoaded', () => {
 
     const searchInput = document.getElementById('countrySearch');
@@ -1235,51 +1389,69 @@ document.addEventListener('DOMContentLoaded', () => {
     const onlyResults = document.getElementById('onlyResults');
 
     if (!searchInput) return;
-	
-	function normalizeText(text) {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
-}
+
+    function normalizeText(text) {
+        return text
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+    }
 
     function applySearch() {
         const filter = normalizeText(searchInput.value.trim());
         let count = 0;
 
-       document.querySelectorAll('table tr').forEach(row => {
-    if (!row.querySelector('td')) return;
+        document.querySelectorAll('table tr').forEach(row => {
 
-    const country = normalizeText(row.cells[0]?.textContent || '');
-	const capital = normalizeText(row.cells[1]?.textContent || '');
+            if (!row.querySelector('td')) return;
 
+            const country = normalizeText(row.cells[0]?.textContent || '');
+            const capital = normalizeText(row.cells[1]?.textContent || '');
 
-    const match =
-        filter &&
-        (country.startsWith(filter) || capital.startsWith(filter));
+            const match =
+                filter &&
+                (country.startsWith(filter) || capital.startsWith(filter));
 
-    row.classList.toggle('highlight', match);
+            row.classList.toggle('highlight', Boolean(match));
 
-    if (onlyResults && onlyResults.checked && filter) {
-        row.style.display = match ? '' : 'none';
-    } else {
-        row.style.display = '';
-    }
+            if (onlyResults && onlyResults.checked && filter) {
+                row.style.display = match ? '' : 'none';
+            } else {
+                row.style.display = '';
+            }
 
-    if (match) count++;
-});
+            if (match) count++;
+        });
 
         if (info) {
+
             if (!filter) {
                 info.textContent = '';
+
             } else if (count === 0) {
-                info.textContent = `❌ Brak wyników dla „${searchInput.value}”`;
+
+                const messages = {
+                    pl: `❌ Brak wyników dla „${searchInput.value}”`,
+                    en: `❌ No results for "${searchInput.value}"`,
+                    ua: `❌ Нічого не знайдено за запитом "${searchInput.value}"`
+                };
+
+                info.textContent = messages[currentLang];
+
             } else {
-                info.textContent = `Znaleziono: ${count}`;
+
+                const messages = {
+                    pl: `Znaleziono: ${count}`,
+                    en: `Found: ${count}`,
+                    ua: `Знайдено: ${count}`
+                };
+
+                info.textContent = messages[currentLang];
             }
         }
 
         localStorage.setItem('search', searchInput.value);
+
         if (onlyResults) {
             localStorage.setItem('onlyResults', onlyResults.checked);
         }
@@ -1292,8 +1464,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     searchInput.addEventListener('keydown', e => {
+
         if (e.key === 'Enter') {
+
             const first = document.querySelector('tr.highlight');
+
             if (first) {
                 first.scrollIntoView({
                     behavior: 'smooth',
@@ -1302,188 +1477,230 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-	
+
     searchInput.value = localStorage.getItem('search') || '';
+
     if (onlyResults) {
         onlyResults.checked = localStorage.getItem('onlyResults') === 'true';
     }
 
     applySearch();
+
+    document.addEventListener('languageChanged', applySearch);
+
 });
 
+document.addEventListener('DOMContentLoaded', () => {
 
-document.addEventListener("DOMContentLoaded", () => {
-  const toggle = document.getElementById("themeToggle");
+    const toggle = document.getElementById('themeToggle');
 
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark");
-    toggle.checked = true;
-  }
+    function applyTheme(theme) {
 
-  toggle.addEventListener("change", () => {
-    document.body.classList.toggle("dark");
-    localStorage.setItem(
-      "theme",
-      document.body.classList.contains("dark") ? "dark" : "light"
-    );
-  });
-});
-document.addEventListener("DOMContentLoaded", () => {
-  const toTop = document.getElementById("toTop");
+        document.body.classList.toggle('dark', theme === 'dark');
 
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 300) {
-      toTop.classList.add("show");
-    } else {
-      toTop.classList.remove("show");
+        if (toggle) {
+            toggle.checked = theme === 'dark';
+        }
     }
-  });
 
-  toTop.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
+    applyTheme(localStorage.getItem('theme') || 'light');
+
+    if (toggle) {
+
+        toggle.addEventListener('change', () => {
+
+            const theme = toggle.checked ? 'dark' : 'light';
+
+            localStorage.setItem('theme', theme);
+
+            applyTheme(theme);
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const toTop = document.getElementById('toTop');
+
+    if (!toTop) return;
+
+    window.addEventListener('scroll', () => {
+
+        if (window.scrollY > 300) {
+            toTop.classList.add('show');
+        } else {
+            toTop.classList.remove('show');
+        }
     });
-  });
-});
-document.addEventListener("mousemove", (e) => {
-  const glow = document.getElementById("cursorGlow");
-  glow.style.left = e.clientX + "px";
-  glow.style.top = e.clientY + "px";
-});
-const glow = document.getElementById("cursorGlow");
 
-document.addEventListener("mousemove", (e) => {
-  glow.style.left = e.clientX + "px";
-  glow.style.top = e.clientY + "px";
-  glow.style.opacity = "1";
+    toTop.addEventListener('click', () => {
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
 });
 
-document.addEventListener("mouseleave", () => {
-  glow.style.opacity = "0";
-});
+const glow = document.getElementById('cursorGlow');
 
-document.addEventListener("mouseenter", () => {
-  glow.style.opacity = "1";
-});
+if (glow) {
 
-document.addEventListener("click", () => {
-  glow.classList.add("shrink");
-  setTimeout(() => {
-    glow.classList.remove("shrink");
-  }, 180);
-});
+    document.addEventListener('mousemove', e => {
+        glow.style.left = e.clientX + 'px';
+        glow.style.top = e.clientY + 'px';
+        glow.style.opacity = '1';
+    });
+
+    document.addEventListener('mouseleave', () => {
+        glow.style.opacity = '0';
+    });
+
+    document.addEventListener('mouseenter', () => {
+        glow.style.opacity = '1';
+    });
+
+    document.addEventListener('click', () => {
+
+        glow.classList.add('shrink');
+
+        setTimeout(() => {
+            glow.classList.remove('shrink');
+        }, 180);
+    });
+}
+
 const countryMap = {
-  pl: "Polska",
-  fr: "Francja",
-  de: "Niemcy",
-  it: "Włochy",
-  es: "Hiszpania",
-  pt: "Portugalia",
-  ua: "Ukraina",
-  by: "Białoruś",
-  no: "Norwegia",
-  se: "Szwecja",
-  fi: "Finlandia",
-  dk: "Dania",
-  nl: "Holandia",
-  be: "Belgia",
-  at: "Austria",
-  ch: "Szwajcaria",
-  cz: "Czechy",
-  sk: "Słowacja",
-  hu: "Węgry",
-  ro: "Rumunia",
-  "ru-main": "Rosja",
-  "ru-kgd": "Rosja",
-  bg: "Bułgaria",
-  gr: "Grecja",
-  hr: "Chorwacja",
-  rs: "Serbia",
-  si: "Słowenia",
-  ba: "Bośnia i Hercegowina",
-  me: "Czarnogóra",
-  mk: "Macedonia",
-  al: "Albania",
-  xk: "Kosowo",
-  md: "Mołdawia",
-  lt: "Litwa",
-  lv: "Łotwa",
-  ee: "Estonia",
-  ie: "Irlandia",
-  is: "Islandia",
-  lu: "Luksemburg",
-  li: "Liechtenstein",
-  mc: "Monako",
-  sm: "San Marino",
-  va: "Watykan",
-  mt: "Malta",
-  "gb-gbn": "Wielka Brytania",
-  "gb-nir": "Wielka Brytania",
-  "tr-main": "Turcja",
-  "tr-europe": "Turcja",
-  ad: "Andora"
+
+    pl: ["Polska", "Poland", "Польща"],
+    fr: ["Francja", "France", "Франція"],
+    de: ["Niemcy", "Germany", "Німеччина"],
+    it: ["Włochy", "Italy", "Італія"],
+    es: ["Hiszpania", "Spain", "Іспанія"],
+    pt: ["Portugalia", "Portugal", "Португалія"],
+    ua: ["Ukraina", "Ukraine", "Україна"],
+    by: ["Białoruś", "Belarus", "Білорусь"],
+    no: ["Norwegia", "Norway", "Норвегія"],
+    se: ["Szwecja", "Sweden", "Швеція"],
+    fi: ["Finlandia", "Finland", "Фінляндія"],
+    dk: ["Dania", "Denmark", "Данія"],
+    nl: ["Holandia", "Netherlands", "Нідерланди"],
+    be: ["Belgia", "Belgium", "Бельгія"],
+    at: ["Austria", "Austria", "Австрія"],
+    ch: ["Szwajcaria", "Switzerland", "Швейцарія"],
+    cz: ["Czechy", "Czechia", "Чехія"],
+    sk: ["Słowacja", "Slovakia", "Словаччина"],
+    hu: ["Węgry", "Hungary", "Угорщина"],
+    ro: ["Rumunia", "Romania", "Румунія"],
+    "ru-main": ["Rosja", "Russia", "Росія"],
+    "ru-kgd": ["Rosja", "Russia", "Росія"],
+    bg: ["Bułgaria", "Bulgaria", "Болгарія"],
+    gr: ["Grecja", "Greece", "Греція"],
+    hr: ["Chorwacja", "Croatia", "Хорватія"],
+    rs: ["Serbia", "Serbia", "Сербія"],
+    si: ["Słowenia", "Slovenia", "Словенія"],
+    ba: ["Bośnia i Hercegowina", "Bosnia and Herzegovina", "Боснія і Герцеговина"],
+    me: ["Czarnogóra", "Montenegro", "Чорногорія"],
+    mk: ["Macedonia Północna", "North Macedonia", "Північна Македонія"],
+    al: ["Albania", "Albania", "Албанія"],
+    xk: ["Kosowo", "Kosovo", "Косово"],
+    md: ["Mołdawia", "Moldova", "Молдова"],
+    lt: ["Litwa", "Lithuania", "Литва"],
+    lv: ["Łotwa", "Latvia", "Латвія"],
+    ee: ["Estonia", "Estonia", "Естонія"],
+    ie: ["Irlandia", "Ireland", "Ірландія"],
+    is: ["Islandia", "Iceland", "Ісландія"],
+    lu: ["Luksemburg", "Luxembourg", "Люксембург"],
+    li: ["Liechtenstein", "Liechtenstein", "Ліхтенштейн"],
+    mc: ["Monako", "Monaco", "Монако"],
+    sm: ["San Marino", "San Marino", "Сан-Марино"],
+    va: ["Watykan", "Vatican City", "Ватикан"],
+    mt: ["Malta", "Malta", "Мальта"],
+    "gb-gbn": ["Wielka Brytania", "United Kingdom", "Велика Британія"],
+    "gb-nir": ["Wielka Brytania", "United Kingdom", "Велика Британія"],
+    "tr-main": ["Turcja", "Turkey", "Туреччина"],
+    "tr-europe": ["Turcja", "Turkey", "Туреччина"],
+    ad: ["Andora", "Andorra", "Андорра"],
+    gl: ["Grenlandia", "Greenland", "Гренландія"]
 };
 
-window.addEventListener("load", () => {
+window.addEventListener('load', () => {
 
-  const tooltip = document.getElementById("mapTooltip");
+    const tooltip = document.getElementById('mapTooltip');
 
-  document.querySelectorAll("svg [id]").forEach(country => {
+    if (!tooltip) return;
 
-    const id = country.id?.toLowerCase();
+    document.querySelectorAll('svg [id]').forEach(country => {
 
-    if (id === "large_masses_of_water") return;
-    if (!countryMap[id]) return;
+        const id = country.id?.toLowerCase();
 
-    country.addEventListener("mousemove", (e) => {
+        if (id === 'large_masses_of_water') return;
+        if (!countryMap[id]) return;
 
-      tooltip.textContent = countryMap[id];
-
-      tooltip.style.left = (e.clientX + 12) + "px";
-      tooltip.style.top = (e.clientY + 12) + "px";
-
-      tooltip.style.opacity = "1";
-    });
-
-    country.addEventListener("mouseleave", () => {
-      tooltip.style.opacity = "0";
-    });
-
-    country.addEventListener("click", () => {
-
-      const name = countryMap[id];
-
-      document.querySelectorAll("table tr").forEach(row => {
-
-        const cell = row.cells[0];
-        if (!cell) return;
-
-        const text = cell.textContent.toLowerCase();
-
-        if (text.includes(name.toLowerCase())) {
-
-          row.classList.add("highlight");
-
-          row.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-
-          setTimeout(() => {
-            row.classList.remove("highlight");
-          }, 2000);
-
+        function getMapName() {
+            return countryMap[id][languageIndex[currentLang]];
         }
 
-      });
+        country.addEventListener('mousemove', e => {
 
+            tooltip.textContent = getMapName();
+
+            tooltip.style.left = (e.clientX + 12) + 'px';
+            tooltip.style.top = (e.clientY + 12) + 'px';
+
+            tooltip.style.opacity = '1';
+        });
+
+        country.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = '0';
+        });
+
+        country.addEventListener('click', () => {
+
+            const name = getMapName();
+
+            document.querySelectorAll('table tr').forEach(row => {
+
+                const cell = row.cells[0];
+
+                if (!cell) return;
+
+                const text = cell.textContent.trim().toLowerCase();
+
+                if (text === name.toLowerCase()) {
+
+                    row.classList.add('highlight');
+
+                    row.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+
+                    setTimeout(() => {
+                        row.classList.remove('highlight');
+                    }, 2000);
+                }
+            });
+        });
     });
-
-  });
-
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const savedLang = localStorage.getItem('lang');
+
+    const browserLang = navigator.language.slice(0, 2);
+
+    const lang = savedLang ||
+        (['pl', 'en', 'ua'].includes(browserLang) ? browserLang : 'pl');
+
+    setLang(lang);
+});
+
 </script>
+</body>
+</html>
+
 <button id="toTop" aria-label="Powrót na górę">⬆</button>
 </div>
 
@@ -1492,7 +1709,12 @@ window.addEventListener("load", () => {
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
       <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
     </svg>
-    <span style="color: white; font-weight: bold; font-size: 20px;">KONTAKT</span>
+   <span style="color: white; font-weight: bold; font-size: 20px;"
+      data-pl="KONTAKT"
+      data-en="CONTACT"
+      data-ua="КОНТАКТ">
+    KONTAKT
+</span>
 	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
       <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
     </svg>
@@ -1501,7 +1723,11 @@ window.addEventListener("load", () => {
 
 <footer class="site-footer">
   <div class="footer-line"></div>
-  <p>© 2025 • Stolice Europy • 44 kraje</p>
+  <p data-pl="© 2025 • Stolice Europy • 44 kraje"
+     data-en="© 2025 • European Capitals • 44 countries"
+     data-ua="© 2025 • Столиці Європи • 44 країни">
+     © 2025 • Stolice Europy • 44 kraje
+  </p>
 </footer>
 <div id="mapTooltip"></div>
 </body>
