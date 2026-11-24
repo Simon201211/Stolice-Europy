@@ -1,0 +1,760 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title
+  data-pl="QUIZ STOLIC"
+  data-en="CAPITALS QUIZ"
+  data-ua="ВІКТОРИНА СТОЛИЦЬ">
+  QUIZ STOLIC
+</title>
+
+<style>
+* { box-sizing: border-box;}
+
+:root {
+    --bg: #eef2f7;
+    --text: #333;
+    --card: #ffffff;
+    --primary: #2b3a55;
+    --border: #d0d0d0;
+    --hover: #f0f4ff;
+    --footer-line: #000000;
+}
+
+body.dark {
+    --bg: #1a1f2b;
+    --text: #ffffff;
+    --card: #232a3b;
+    --primary: #8fa4c8;
+    --border: #3a3f4f;
+    --hover: #2f3a55;
+    --footer-line: #ffffff;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.container {
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 35px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.12);
+    transition: background 0.3s, border 0.3s;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1 {
+    font-size: 32px;
+    margin: 15px 0 10px;
+}
+
+.description {
+    color: var(--text);
+    opacity: 0.75;
+    line-height: 1.6;
+}
+
+.progress {
+    color: var(--primary);
+    margin: 25px 0 10px;
+    font-weight: bold;
+}
+
+.question {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 25px 0;
+    color: var(--text);
+}
+
+.answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.answer {
+    background: var(--hover);
+    color: var(--text);
+    border: 2px solid var(--border);
+    padding: 17px 10px;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.answer:hover:not(:disabled) {
+    background: var(--border);
+}
+
+.answer:disabled {
+    cursor: default;
+    opacity: 1;
+}
+
+.answer.correct {
+    background: #c9f0d9;
+    color: #155c36;
+    border-color: #239653;
+}
+
+.answer.wrong {
+    background: #f8d5d8;
+    color: #8b2632;
+    border-color: #d94b4b;
+}
+
+body.dark .answer.correct {
+    background: #236b4a;
+    color: white;
+    border-color: #6fe0a0;
+}
+
+body.dark .answer.wrong {
+    background: #783c46;
+    color: white;
+    border-color: #ff9292;
+}
+
+#feedback {
+    min-height: 28px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+button.next {
+    background: #398be5;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 13px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button.next:hover:not(:disabled) {
+    background: #2775c9;
+}
+
+button:disabled {
+    cursor: default;
+}
+
+.result {
+    font-size: 22px;
+    margin: 25px 0;
+    color: var(--text);
+}
+
+.best {
+    color: var(--text);
+    opacity: 0.75;
+    margin-bottom: 25px;
+}
+
+.hidden {
+    display: none;
+}
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 10;
+}
+
+.toggle {
+    position: relative;
+    width: 50px;
+    height: 26px;
+}
+
+.toggle input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    background: #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: 0.3s;
+}
+
+.toggle input:checked + .slider {
+    background: var(--primary);
+}
+
+.toggle input:checked + .slider::before {
+    transform: translateX(24px);
+}
+
+@media (max-width: 500px) {
+    .container {
+        padding: 23px 17px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    .answers {
+        grid-template-columns: 1fr;
+    }
+
+    .question {
+        font-size: 21px;
+    }
+
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+    }
+}
+.cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 130px;
+    height: 130px;
+    pointer-events: none;
+    border-radius: 50%;
+    background: transparent;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+}
+
+body.dark .cursor-glow {
+    background: radial-gradient(circle,
+        rgba(255,215,0,0.55) 0%,
+        rgba(255,215,0,0.30) 35%,
+        rgba(255,215,0,0.10) 60%,
+        transparent 75%);
+    filter: blur(1px);
+}
+
+.cursor-glow.shrink {
+    transform: translate(-50%, -50%) scale(0.55);
+    transition: transform 0.18s ease;
+}
+
+.page {
+    position: relative;
+    z-index: 1;
+}
+.flag {
+  width: 48px;
+  cursor: pointer;
+  margin: 0 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.flag:hover {
+  transform: scale(1.1);
+}
+
+.flag:active {
+  transform: scale(0.9);
+  opacity: 0.8;
+}
+
+.flag.active {
+  box-shadow: 0 0 12px 4px #ffd700;
+  transform: scale(1.1);
+}
+</style>
+</head>
+
+<body>
+<div class="lang-switch">
+    <svg onclick="setLang('pl')" viewBox="0 0 60 40" class="flag">
+        <rect width="60" height="20" y="0" fill="#ffffff"/>
+        <rect width="60" height="20" y="20" fill="#dc143c"/>
+    </svg>
+
+    <svg onclick="setLang('en')" viewBox="0 0 60 40" class="flag">
+        <rect width="60" height="40" fill="#012169"/>
+        <path d="M0 0 L60 40 M60 0 L0 40" stroke="#fff" stroke-width="8"/>
+        <path d="M0 0 L60 40 M60 0 L0 40" stroke="#c8102e" stroke-width="4"/>
+        <rect x="26" width="8" height="40" fill="#fff"/>
+        <rect y="16" width="60" height="8" fill="#fff"/>
+        <rect x="28" width="4" height="40" fill="#c8102e"/>
+        <rect y="18" width="60" height="4" fill="#c8102e"/>
+    </svg>
+
+    <svg onclick="setLang('ua')" viewBox="0 0 60 40" class="flag">
+        <rect width="60" height="20" y="0" fill="#0057b7"/>
+        <rect width="60" height="20" y="20" fill="#ffd700"/>
+    </svg>
+</div>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<div class="theme-toggle">
+    <span>🌞</span>
+    <label class="toggle">
+        <input type="checkbox" id="themeToggle">
+        <span class="slider"></span>
+    </label>
+    <span>🌙</span>
+</div>
+
+<div class="container">
+
+    <a href="index.html"
+       data-pl="← Powrót do strony głównej"
+       data-en="← Back to homepage"
+       data-ua="← Повернутися на головну сторінку">
+       ← Powrót do strony głównej
+    </a>
+
+    <h1 data-pl="🧠 Quiz stolic"
+        data-en="🧠 Capitals Quiz"
+        data-ua="🧠 Вікторина столиць">
+        🧠 Quiz stolic
+    </h1>
+
+    <p class="description"
+       data-pl="Odpowiedz na 10 pytań i sprawdź, jak dobrze znasz stolice Europy!"
+       data-en="Answer 10 questions and see how well you know the capitals of Europe!"
+       data-ua="Дайте відповіді на 10 запитань і перевірте, наскільки добре ви знаєте столиці Європи!">
+        Odpowiedz na 10 pytań i sprawdź, jak dobrze znasz stolice Europy!
+    </p>
+
+    <div id="game">
+        <div class="progress" id="progress"
+             data-pl="Pytanie 1 / 10"
+             data-en="Question 1 / 10"
+             data-ua="Запитання 1 / 10">
+            Pytanie 1 / 10
+        </div>
+
+        <div class="question" id="question"></div>
+
+        <div class="answers" id="answers"></div>
+
+        <div id="feedback"></div>
+    </div>
+
+    <div id="resultScreen" class="hidden">
+        <h2 data-pl="🏁 Koniec quizu!"
+            data-en="🏁 Quiz completed!"
+            data-ua="🏁 Вікторину завершено!">
+            🏁 Koniec quizu!
+        </h2>
+
+        <div class="result" id="result"></div>
+
+        <div class="best" id="bestResult"></div>
+
+        <button class="next" onclick="startQuiz()"
+                data-pl="Zagraj ponownie"
+                data-en="Play again"
+                data-ua="Зіграти ще раз">
+            Zagraj ponownie
+        </button>
+    </div>
+
+</div>
+
+
+<script>
+const countries = [
+    ["Albania", "Tirana", "Albania", "Tirana", "Албанія", "Тирана"],
+    ["Andora", "Andorra la Vella", "Andorra", "Andorra la Vella", "Андорра", "Андорра-ла-Велья"],
+    ["Austria", "Wiedeń", "Austria", "Vienna", "Австрія", "Відень"],
+    ["Belgia", "Bruksela", "Belgium", "Brussels", "Бельгія", "Брюссель"],
+    ["Białoruś", "Mińsk", "Belarus", "Minsk", "Білорусь", "Мінськ"],
+    ["Bośnia i Hercegowina", "Sarajewo", "Bosnia and Herzegovina", "Sarajevo", "Боснія і Герцеговина", "Сараєво"],
+    ["Bułgaria", "Sofia", "Bulgaria", "Sofia", "Болгарія", "Софія"],
+    ["Chorwacja", "Zagrzeb", "Croatia", "Zagreb", "Хорватія", "Загреб"],
+    ["Czarnogóra", "Podgorica", "Montenegro", "Podgorica", "Чорногорія", "Подгориця"],
+    ["Czechy", "Praga", "Czechia", "Prague", "Чехія", "Прага"],
+    ["Dania", "Kopenhaga", "Denmark", "Copenhagen", "Данія", "Копенгаген"],
+    ["Estonia", "Tallinn", "Estonia", "Tallinn", "Естонія", "Таллінн"],
+    ["Finlandia", "Helsinki", "Finland", "Helsinki", "Фінляндія", "Гельсінкі"],
+    ["Francja", "Paryż", "France", "Paris", "Франція", "Париж"],
+    ["Grecja", "Ateny", "Greece", "Athens", "Греція", "Афіни"],
+    ["Hiszpania", "Madryt", "Spain", "Madrid", "Іспанія", "Мадрид"],
+    ["Holandia", "Amsterdam", "Netherlands", "Amsterdam", "Нідерланди", "Амстердам"],
+    ["Irlandia", "Dublin", "Ireland", "Dublin", "Ірландія", "Дублін"],
+    ["Islandia", "Reykjavik", "Iceland", "Reykjavik", "Ісландія", "Рейк'явік"],
+    ["Kosowo", "Prisztina", "Kosovo", "Pristina", "Косово", "Приштина"],
+    ["Liechtenstein", "Vaduz", "Liechtenstein", "Vaduz", "Ліхтенштейн", "Вадуц"],
+    ["Litwa", "Wilno", "Lithuania", "Vilnius", "Литва", "Вільнюс"],
+    ["Luksemburg", "Luksemburg", "Luxembourg", "Luxembourg", "Люксембург", "Люксембург"],
+    ["Łotwa", "Ryga", "Latvia", "Riga", "Латвія", "Рига"],
+    ["Macedonia Północna", "Skopje", "North Macedonia", "Skopje", "Північна Македонія", "Скоп'є"],
+    ["Malta", "Valletta", "Malta", "Valletta", "Мальта", "Валлетта"],
+    ["Mołdawia", "Kiszyniów", "Moldova", "Chisinau", "Молдова", "Кишинів"],
+    ["Monako", "Monako", "Monaco", "Monaco", "Монако", "Монако"],
+    ["Niemcy", "Berlin", "Germany", "Berlin", "Німеччина", "Берлін"],
+    ["Norwegia", "Oslo", "Norway", "Oslo", "Норвегія", "Осло"],
+    ["Polska", "Warszawa", "Poland", "Warsaw", "Польща", "Варшава"],
+    ["Portugalia", "Lizbona", "Portugal", "Lisbon", "Португалія", "Лісабон"],
+    ["Rosja", "Moskwa", "Russia", "Moscow", "Росія", "Москва"],
+    ["Rumunia", "Bukareszt", "Romania", "Bucharest", "Румунія", "Бухарест"],
+    ["San Marino", "San Marino", "San Marino", "San Marino", "Сан-Марино", "Сан-Марино"],
+    ["Serbia", "Belgrad", "Serbia", "Belgrade", "Сербія", "Белград"],
+    ["Słowacja", "Bratysława", "Slovakia", "Bratislava", "Словаччина", "Братислава"],
+    ["Słowenia", "Lublana", "Slovenia", "Ljubljana", "Словенія", "Любляна"],
+    ["Szwajcaria", "Berno", "Switzerland", "Bern", "Швейцарія", "Берн"],
+    ["Szwecja", "Sztokholm", "Sweden", "Stockholm", "Швеція", "Стокгольм"],
+    ["Turcja", "Ankara", "Turkey", "Ankara", "Туреччина", "Анкара"],
+    ["Ukraina", "Kijów", "Ukraine", "Kyiv", "Україна", "Київ"],
+    ["Watykan", "Watykan", "Vatican City", "Vatican City", "Ватикан", "Ватикан"],
+    ["Węgry", "Budapeszt", "Hungary", "Budapest", "Угорщина", "Будапешт"],
+    ["Wielka Brytania", "Londyn", "United Kingdom", "London", "Велика Британія", "Лондон"],
+    ["Włochy", "Rzym", "Italy", "Rome", "Італія", "Рим"]
+];
+
+const translations = {
+    pl: {
+        progress: "Pytanie",
+        question: "Jaka jest stolica państwa:",
+        correct: "✓ Poprawna odpowiedź!",
+        wrong: "✗ Poprawna odpowiedź:",
+        result: "Twój wynik:",
+        best: "Twój rekord:",
+        completed: "Quiz zakończony!"
+    },
+    en: {
+        progress: "Question",
+        question: "What is the capital of:",
+        correct: "✓ Correct answer!",
+        wrong: "✗ Correct answer:",
+        result: "Your score:",
+        best: "Your best score:",
+        completed: "Quiz completed!"
+    },
+    ua: {
+        progress: "Запитання",
+        question: "Яка столиця країни:",
+        correct: "✓ Правильна відповідь!",
+        wrong: "✗ Правильна відповідь:",
+        result: "Ваш результат:",
+        best: "Ваш рекорд:",
+        completed: "Вікторину завершено!"
+    }
+};
+
+let currentLang = "pl";
+let questions = [];
+let questionIndex = 0;
+let score = 0;
+let answered = false;
+let currentOptions = [];
+let selectedCountryIndex = null;
+let feedbackType = "";
+
+let bestScore = 0;
+
+function getCountryName(country) {
+    return country[currentLang === "pl" ? 0 : currentLang === "en" ? 2 : 4];
+}
+
+function getCapital(country) {
+    return country[currentLang === "pl" ? 1 : currentLang === "en" ? 3 : 5];
+}
+
+function shuffle(array) {
+    return [...array].sort(() => Math.random() - 0.5);
+}
+
+function startQuiz() {
+    questions = shuffle(countries).slice(0, 10);
+    questionIndex = 0;
+    score = 0;
+    answered = false;
+    selectedCountryIndex = null;
+    feedbackType = "";
+
+    document.getElementById("game").classList.remove("hidden");
+    document.getElementById("resultScreen").classList.add("hidden");
+
+    showQuestion();
+}
+
+function showQuestion() {
+    answered = false;
+    selectedCountryIndex = null;
+    feedbackType = "";
+
+    const current = questions[questionIndex];
+
+    currentOptions = shuffle([
+        current,
+        ...shuffle(countries.filter(c => c !== current)).slice(0, 3)
+    ]);
+
+    renderQuestion();
+}
+
+function renderQuestion() {
+    const current = questions[questionIndex];
+    const t = translations[currentLang];
+
+    document.getElementById("progress").textContent =
+        `${t.progress} ${questionIndex + 1} / 10`;
+
+    document.getElementById("question").textContent =
+        `${t.question} ${getCountryName(current)}?`;
+
+    const answersBox = document.getElementById("answers");
+    answersBox.innerHTML = "";
+
+    currentOptions.forEach(country => {
+        const button = document.createElement("button");
+        button.className = "answer";
+        button.textContent = getCapital(country);
+
+        const countryIndex = countries.indexOf(country);
+
+        if (answered) {
+            button.disabled = true;
+
+            if (country === current) {
+                button.classList.add("correct");
+            }
+
+            if (countryIndex === selectedCountryIndex && country !== current) {
+                button.classList.add("wrong");
+            }
+        }
+
+        button.onclick = () => checkAnswer(button, countryIndex);
+        answersBox.appendChild(button);
+    });
+
+    renderFeedback();
+}
+
+function renderFeedback() {
+    const feedback = document.getElementById("feedback");
+    const t = translations[currentLang];
+
+    if (feedbackType === "correct") {
+        feedback.textContent = t.correct;
+        feedback.style.color = document.body.classList.contains("dark")
+            ? "#6fe0a0"
+            : "#239653";
+    } else if (feedbackType === "wrong") {
+        const correct = getCapital(questions[questionIndex]);
+
+        feedback.textContent = `${t.wrong} ${correct}`;
+        feedback.style.color = document.body.classList.contains("dark")
+            ? "#ff9292"
+            : "#d94b4b";
+    } else {
+        feedback.textContent = "";
+    }
+}
+
+function checkAnswer(button, selectedIndex) {
+    if (answered) return;
+
+    answered = true;
+    selectedCountryIndex = selectedIndex;
+
+    const correct = questions[questionIndex];
+    const selected = countries[selectedIndex];
+
+    if (selected === correct) {
+        score++;
+        feedbackType = "correct";
+    } else {
+        feedbackType = "wrong";
+    }
+
+    renderQuestion();
+
+    setTimeout(() => {
+        nextQuestion();
+    }, 1500);
+}
+
+function nextQuestion() {
+    if (!answered) return;
+
+    questionIndex++;
+
+    if (questionIndex < 10) {
+        showQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+    document.getElementById("game").classList.add("hidden");
+    document.getElementById("resultScreen").classList.remove("hidden");
+
+    const oldBest = Number(localStorage.getItem("quizBest")) || 0;
+    bestScore = Math.max(oldBest, score);
+
+    localStorage.setItem("quizBest", bestScore);
+
+    renderResult();
+}
+
+function renderResult() {
+    const t = translations[currentLang];
+
+    document.getElementById("result").textContent =
+        `${t.result} ${score} / 10`;
+
+    document.getElementById("bestResult").textContent =
+        `${t.best} ${bestScore} / 10`;
+}
+
+
+// MOTYW
+
+const themeToggle = document.getElementById("themeToggle");
+
+function applyTheme(theme) {
+    document.body.classList.toggle("dark", theme === "dark");
+
+    if (themeToggle) {
+        themeToggle.checked = theme === "dark";
+    }
+
+    renderFeedback();
+}
+
+themeToggle.addEventListener("change", function() {
+    const theme = this.checked ? "dark" : "light";
+
+    localStorage.setItem("theme", theme);
+    applyTheme(theme);
+});
+
+applyTheme(localStorage.getItem("theme") || "light");
+
+
+// KURSOR
+
+const glow = document.getElementById("cursorGlow");
+
+document.addEventListener("mousemove", (e) => {
+    glow.style.left = e.clientX + "px";
+    glow.style.top = e.clientY + "px";
+    glow.style.opacity = "1";
+});
+
+document.addEventListener("mouseleave", () => {
+    glow.style.opacity = "0";
+});
+
+document.addEventListener("mouseenter", () => {
+    glow.style.opacity = "1";
+});
+
+document.addEventListener("click", () => {
+    glow.classList.add("shrink");
+
+    setTimeout(() => {
+        glow.classList.remove("shrink");
+    }, 180);
+});
+
+
+// ZMIANA JĘZYKA
+
+function setLang(lang) {
+    currentLang = lang;
+
+    document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+        el.innerHTML = el.getAttribute('data-' + lang);
+    });
+
+    const title = document.querySelector('title');
+
+    if (title && title.getAttribute('data-' + lang)) {
+        title.textContent = title.getAttribute('data-' + lang);
+    }
+
+    localStorage.setItem('lang', lang);
+
+    document.querySelectorAll('.flag').forEach(f => {
+        f.classList.remove('active');
+    });
+
+    const activeFlag = document.querySelector(
+        `.flag[onclick="setLang('${lang}')"]`
+    );
+
+    if (activeFlag) activeFlag.classList.add('active');
+
+    document.dispatchEvent(
+        new CustomEvent("languageChanged", { detail: lang })
+    );
+}
+
+document.addEventListener("languageChanged", (event) => {
+    currentLang = event.detail;
+
+    if (!document.getElementById("game").classList.contains("hidden")) {
+        renderQuestion();
+    }
+
+    if (!document.getElementById("resultScreen").classList.contains("hidden")) {
+        renderResult();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const lang = localStorage.getItem('lang')
+        || ({ en: 'en', ua: 'ua', pl: 'pl' }[navigator.language.slice(0, 2)] || 'pl');
+
+    setLang(lang);
+});
+
+startQuiz();
+</script>
+</body>
+</html>
